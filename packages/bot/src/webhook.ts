@@ -1,5 +1,6 @@
 // LINE webhook entry point: checks the signature, then hands each event to its handler.
 import type { WebhookBody, WebhookEvent } from "./line-types.ts";
+import type { ProcessedEventStore } from "./processed-events.ts";
 import { verifyLineSignature } from "./signature.ts";
 
 export type EventHandler = (event: WebhookEvent) => Promise<void>;
@@ -8,6 +9,8 @@ export interface WebhookOptions {
   channelSecret: string;
   /** Handlers by LINE event type ("message", "join", "postback", ...). Others are ignored. */
   handlers: Partial<Record<string, EventHandler>>;
+  /** Skips events whose webhookEventId was already handled (redeliveries). */
+  processedEvents: ProcessedEventStore;
   logError?: (message: string, error: unknown) => void;
 }
 
@@ -39,6 +42,9 @@ export function createWebhookHandler(options: WebhookOptions): (req: Request) =>
       const handler = options.handlers[event.type];
       if (!handler) continue;
       try {
+        // Recorded before handling: if a handler crashes halfway, a redelivery is skipped
+        // rather than risk creating a bill or payment twice.
+        if (!(await options.processedEvents.markProcessed(event.webhookEventId))) continue;
         await handler(event);
       } catch (error) {
         logError(`Handler for ${event.type} event ${event.webhookEventId} failed`, error);
