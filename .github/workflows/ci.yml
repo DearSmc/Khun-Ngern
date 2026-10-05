@@ -22,6 +22,11 @@ jobs:
       - run: npm run format:check
       - run: npm run typecheck
       - run: npm test
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Typecheck backend functions
+        run: deno check supabase/functions/*/index.ts
 
   database:
     runs-on: ubuntu-latest
