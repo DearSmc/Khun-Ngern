@@ -25,6 +25,8 @@ npm run typecheck
 npm test
 ```
 
+The database schema is in `supabase/migrations`, fake local data in `supabase/seed.sql`, and constraint checks in `supabase/tests`. CI applies all three to a fresh Postgres 16 on every pull request.
+
 Copy `.env.example` to `.env` and fill in values for local development. Never commit real secrets.
 
 ## Conventions
