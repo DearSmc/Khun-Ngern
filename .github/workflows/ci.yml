@@ -25,8 +25,8 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Typecheck backend functions
-        run: deno check --config supabase/functions/deno.json supabase/functions/*/index.ts
+      - name: Typecheck backend functions and shared packages under Deno
+        run: deno check --config supabase/functions/deno.json supabase/functions/*/index.ts packages/*/src/index.ts
 
   database:
     runs-on: ubuntu-latest
