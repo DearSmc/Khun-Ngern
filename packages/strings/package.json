@@ -1,0 +1,6 @@
+{
+  "name": "@khun-ngern/strings",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts"
+}

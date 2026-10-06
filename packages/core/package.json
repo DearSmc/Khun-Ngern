@@ -1,0 +1,6 @@
+{
+  "name": "@khun-ngern/core",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts"
+}
