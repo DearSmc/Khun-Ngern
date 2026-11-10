@@ -22,6 +22,7 @@ Requires Node 20 or newer.
 npm install
 npm run lint
 npm run typecheck
+npm test
 ```
 
 Copy `.env.example` to `.env` and fill in values for local development. Never commit real secrets.
